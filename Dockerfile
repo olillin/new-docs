@@ -116,4 +116,4 @@ USER node
 EXPOSE 3000
 
 # Start Next.js standalone server
-CMD ["/bin/sh", "-c", "cd prisma-cli && npx prisma migrate deploy && cd .. && ([ $SEED == '1' ] && node prisma-seed/seed.js) && node server.js"]
+CMD ["/bin/sh", "-c", "cd prisma-cli && npx prisma migrate deploy && cd .. && ([ \"$SEED\" == \"1\" ] && node prisma-seed/seed.js || true) && node server.js"]

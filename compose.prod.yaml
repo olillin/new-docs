@@ -5,7 +5,7 @@ name: docs
 
 services:
     server:
-        image: 'ghcr.io/olillin/docs:main'
+        image: 'ghcr.io/olillin/new-docs:latest'
         restart: unless-stopped
         secrets:
             - database-url
