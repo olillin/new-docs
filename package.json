@@ -1,0 +1,60 @@
+{
+    "private": true,
+    "type": "module",
+    "main": ".next/standalone/server.js",
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build && node -e \"require('fs').cpSync('public', '.next/standalone/public', {recursive: true});require('fs').cpSync('.next/static', '.next/standalone/public/_next/static', {recursive: true})\"",
+        "start": "node .",
+        "postinstall": "(copy-env-cli || true)",
+        "typecheck": "tsc --noEmit",
+        "format": "oxfmt",
+        "format:check": "oxfmt --check",
+        "lint": "oxlint"
+    },
+    "dependencies": {
+        "@heroui/react": "^3.2.4",
+        "@heroui/styles": "^3.2.4",
+        "@prisma/adapter-pg": "^7.10.0",
+        "@prisma/client": "^7.10.0",
+        "@t3-oss/env-core": "^0.13.11",
+        "@t3-oss/env-nextjs": "^0.13.11",
+        "clsx": "^2.1.1",
+        "dotenv": "^17.4.2",
+        "lucide-react": "^1.42.0",
+        "next": "^16.3.3",
+        "pg": "^8.23.0",
+        "prisma": "7.10.0",
+        "react": "^19.2.8",
+        "react-dom": "^19.2.8",
+        "zod": "^4.5.4"
+    },
+    "devDependencies": {
+        "@tailwindcss/postcss": "^4.3.3",
+        "@types/node": "^24.13.3",
+        "@types/pg": "^8.23.1",
+        "@types/react": "^19.2.18",
+        "@types/react-dom": "^19.2.5",
+        "copy-env-cli": "^1.0.0",
+        "oxfmt": "^0.65.0",
+        "oxlint": "^1.80.0",
+        "oxlint-tsgolint": "^7.0.2001",
+        "postcss": "^8.5.26",
+        "tailwindcss": "^4.3.3",
+        "tsx": "^4.23.13",
+        "typescript": "^7.0.2"
+    },
+    "devEngines": {
+        "packageManager": {
+            "name": "pnpm",
+            "version": "11.24.0",
+            "onFail": "warn"
+        },
+        "runtime": {
+            "name": "node",
+            "version": "^24.19.0",
+            "onFail": "error"
+        }
+    },
+    "packageManager": "pnpm@11.24.0"
+}

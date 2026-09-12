@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+@import '@heroui/styles';
+
+:root {
+    color-scheme: dark;
+}
+
+@theme {
+    --color-turkos: #09cdda;
+}
+
+html {
+    background: #141414;
+    color: #ffffff;
+}
+
+body {
+    @apply bg-[#141414] text-white antialiased;
+    font-family: sans-serif;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+@layer base {
+    footer a {
+        color: var(--color-turkos);
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

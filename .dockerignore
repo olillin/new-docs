@@ -1,0 +1,10 @@
+.env*
+node_modules
+uploads
+secrets
+tests
+compose.*
+*.md
+flake.nix
+flake.lock
+
