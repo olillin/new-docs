@@ -16,6 +16,9 @@ export default async function Page(context: {
         },
         include: {
             documents: {
+                orderBy: {
+                    priority: 'asc',
+                },
                 include: {
                     uploads: {
                         orderBy: {
@@ -25,7 +28,11 @@ export default async function Page(context: {
                     },
                 },
             },
-            meetingMinutes: true,
+            meetingMinutes: {
+                orderBy: {
+                    meetingDate: 'desc',
+                },
+            },
         },
     })
 

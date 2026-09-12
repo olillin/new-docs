@@ -5,10 +5,8 @@ import { ToastProvider } from '@heroui/react'
 import { Suspense } from 'react'
 
 import { PageFooter } from '@/app/ui/PageFooter'
-import { PageNavigation } from '@/app/ui/PageNavigation'
-
-import { prisma } from './lib/prisma'
-import { PageNavigationSkeleton } from './ui/PageNavigationSkeleton'
+import { PageNavigation } from '@/app/ui/PageNavigation/PageNavigation'
+import { PageNavigationSkeleton } from '@/app/ui/PageNavigation/PageNavigationSkeleton'
 
 export const metadata: Metadata = {
     title: 'IT Student Division Documents',
@@ -26,20 +24,6 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode
 }>) {
-    'use cache'
-
-    const categories = await prisma.category.findMany({
-        select: {
-            id: true,
-            slug: true,
-            svName: true,
-            enName: true,
-        },
-        orderBy: {
-            id: 'asc',
-        },
-    })
-
     return (
         <html lang="en">
             <body
@@ -55,7 +39,7 @@ export default async function RootLayout({
                     </header>
 
                     <Suspense fallback={<PageNavigationSkeleton />}>
-                        <PageNavigation categories={categories} />
+                        <PageNavigation />
                     </Suspense>
                     <main className="my-12">{children}</main>
                     <PageFooter />

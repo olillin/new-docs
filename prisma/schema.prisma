@@ -16,6 +16,7 @@ model Category {
   slug String @unique
   svName String
   enName String
+  priority Int?
 
   documents Document[]
   meetingMinutes MeetingMinutes[]
@@ -28,6 +29,7 @@ model Document {
   category Category @relation(fields: [categoryId], references: [id])
   svName  String
   enName  String
+  priority Int?
 
   uploads Upload[]
 }

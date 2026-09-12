@@ -19,18 +19,21 @@ await prisma.category.createMany({
             svName: 'Verksamhetsdokument',
             enName: 'Operational Documents',
             slug: 'operational-documents',
+            priority: 1,
         },
         {
             id: 2,
             svName: 'Policier',
             enName: 'Policies',
             slug: 'policies',
+            priority: 3,
         },
         {
             id: 3,
             svName: 'Sektionsmötesprotokoll',
             enName: 'Division meeting minutes',
             slug: 'division-meeting-minutes',
+            priority: 2,
         },
     ],
 })
@@ -43,6 +46,7 @@ await prisma.document.createMany({
             slug: 'bylaws',
             svName: 'Stadga',
             enName: 'Bylaws',
+            priority: 1,
         },
         {
             id: 2,
@@ -50,6 +54,7 @@ await prisma.document.createMany({
             slug: 'regulations',
             svName: 'Reglemente',
             enName: 'Regulations',
+            priority: 2,
         },
         {
             id: 3,
@@ -57,6 +62,7 @@ await prisma.document.createMany({
             slug: 'financial-policy',
             svName: 'Ekonomisk policy',
             enName: 'Financial Policy',
+            priority: 1,
         },
         {
             id: 4,
@@ -64,6 +70,15 @@ await prisma.document.createMany({
             slug: 'environmental-policy',
             svName: 'Miljöpolicy',
             enName: 'Environmental Policy',
+            priority: 3,
+        },
+        {
+            id: 5,
+            categoryId: 2,
+            slug: 'communication-policy',
+            svName: 'Kommunikationspolicy',
+            enName: 'Communication Policy',
+            priority: 2,
         },
     ],
 })
@@ -94,6 +109,12 @@ await prisma.upload.createMany({
             documentId: 4,
             hash: '08a5fe2391a80ac254e56c6c8490abf33a466d8d36d2e48bcdbbddd394f0d8f5',
             revisedAt: new Date('2013-05-16'),
+        },
+        // Communication Policy
+        {
+            documentId: 5,
+            hash: '3035804f5a0728760e40390e58861c96d6ca79a955a66df160faed4dbd266d67',
+            revisedAt: new Date('2020-05-14'),
         },
     ],
 })

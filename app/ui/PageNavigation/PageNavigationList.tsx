@@ -5,9 +5,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ReactNode } from 'react'
 
-import { Category } from '../generated/prisma/browser'
+import { Category } from '@/app/generated/prisma/browser'
 
-export function PageNavigation({ categories }: { categories?: Category[] }) {
+export function PageNavigationList({
+    categories,
+}: {
+    categories?: Category[]
+}) {
     const pathname = usePathname()
 
     return (
