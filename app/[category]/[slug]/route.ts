@@ -98,7 +98,9 @@ export async function POST(req: NextRequest, ctx: { params: Promise<Params> }) {
     if (revisedAt) {
         if (
             typeof revisedAt !== 'string' ||
-            !/^\d{4}(-\d{2}){2}T\d{2}(:\d{2}){1,2}(\.\d{3})?Z$/.test(revisedAt)
+            !/^\d{4}(-\d{2}){2}(T\d{2}(:\d{2}){0,2}(\.\d{3})?Z)?$/.test(
+                revisedAt
+            )
         ) {
             return createApiError(
                 400,
