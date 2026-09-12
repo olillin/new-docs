@@ -1,5 +1,6 @@
 .direnv
 .envrc
+bundle/
 secrets/
 temp/
 app/generated/

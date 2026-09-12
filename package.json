@@ -4,7 +4,7 @@
     "main": ".next/standalone/server.js",
     "scripts": {
         "dev": "next dev",
-        "build": "next build && node -e \"require('fs').cpSync('public', '.next/standalone/public', {recursive: true});require('fs').cpSync('.next/static', '.next/standalone/public/_next/static', {recursive: true})\"",
+        "build": "next build && node -e \"require('fs').cpSync('public', '.next/standalone/public', {recursive: true});require('fs').cpSync('.next/static', '.next/standalone/public/_next/static', {recursive: true})\" && rolldown -c rolldown.config.mjs",
         "start": "node .",
         "postinstall": "(copy-env-cli || true)",
         "typecheck": "tsc --noEmit",
@@ -40,6 +40,7 @@
         "oxlint": "^1.80.0",
         "oxlint-tsgolint": "^7.0.2001",
         "postcss": "^8.5.26",
+        "rolldown": "^1.2.8",
         "tailwindcss": "^4.3.3",
         "tsx": "^4.23.13",
         "typescript": "^7.0.2"

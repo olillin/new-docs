@@ -60,6 +60,8 @@ RUN --mount=type=cache,target=/app/.next/cache \
 
 # Setup Prisma environment
 
+RUN cp -r bundle .next/standalone/prisma-seed/
+
 # Remove dotenv import from prisma.config.ts
 RUN sed -i '/dotenv\/config/d' prisma.config.ts
 
@@ -114,4 +116,4 @@ USER node
 EXPOSE 3000
 
 # Start Next.js standalone server
-CMD ["/bin/sh", "-c", "cd prisma-cli && npx prisma migrate deploy && cd .. && node server.js"]
+CMD ["/bin/sh", "-c", "cd prisma-cli && npx prisma migrate deploy && cd .. && ([ $SEED == '1' ] && node prisma-seed/seed.js) && node server.js"]
