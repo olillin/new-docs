@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import { Category, MeetingMinutes } from '@/app/generated/prisma/browser'
 
-import { joinPath, toISODateString } from '../lib/util'
+import { joinPath, toIsoDateString } from '../lib/util'
 
 export function MeetingMinutesCard({
     baseUrl,
@@ -21,11 +21,11 @@ export function MeetingMinutesCard({
                 <ScrollText />
                 <Card.Header>
                     <Card.Title>
-                        {category.svName} {toISODateString(minutes.meetingDate)}
+                        {category.svName} {toIsoDateString(minutes.meetingDate)}
                     </Card.Title>
                     <Card.Description>
                         {/* TODO: Include (local) time in posted time */}
-                        Posted at {toISODateString(minutes.createdAt)}
+                        Posted at {toIsoDateString(minutes.createdAt)}
                     </Card.Description>
                 </Card.Header>
             </Card>

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Document } from '@/app/generated/prisma/browser'
 
 import { Category } from '../generated/prisma/client'
-import { joinPath, toISODateString } from '../lib/util'
+import { joinPath, toIsoDateString } from '../lib/util'
 
 export function DocumentCard({
     baseUrl,
@@ -26,7 +26,7 @@ export function DocumentCard({
                     <Card.Title>{document.svName}</Card.Title>
                     <Card.Description>
                         Last revised at{' '}
-                        {revisedAt ? toISODateString(revisedAt) : 'unknown'}
+                        {revisedAt ? toIsoDateString(revisedAt) : 'unknown'}
                     </Card.Description>
                 </Card.Header>
             </Card>

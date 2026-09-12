@@ -290,7 +290,12 @@
                         "max": 3
                     }
                 ],
-                "@typescript-eslint/explicit-function-return-type": "error",
+                "@typescript-eslint/explicit-function-return-type": [
+                    "error",
+                    {
+                        "allowedNames": ["GET", "POST", "PUT", "DELETE"]
+                    }
+                ],
                 "@typescript-eslint/no-deprecated": "warn"
             },
             "plugins": ["jsdoc"]

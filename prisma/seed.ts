@@ -17,8 +17,8 @@ await prisma.category.createMany({
         {
             id: 1,
             svName: 'Verksamhetsdokument',
-            enName: 'Regulations',
-            slug: 'regulations',
+            enName: 'Operational Documents',
+            slug: 'operational-documents',
         },
         {
             id: 2,
@@ -48,7 +48,7 @@ await prisma.document.createMany({
             id: 2,
             categoryId: 1,
             slug: 'regulations',
-            svName: 'Reglamente',
+            svName: 'Reglemente',
             enName: 'Regulations',
         },
         {
