@@ -26,10 +26,6 @@ export async function GET(
     }
 
     const headers = new Headers()
-    headers.set(
-        'Content-Disposition',
-        `attachment; filename=${params.hash}.pdf`
-    )
     headers.set('Content-Type', 'application/pdf')
     headers.set('Content-Length', size.toString())
 
