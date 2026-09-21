@@ -12,53 +12,52 @@ datasource db {
 }
 
 model SuperCategory {
-  id Int @id @default(autoincrement())
-  slug String @unique
-  svName String
-  enName String
+  id       Int    @id @default(autoincrement())
+  slug     String @unique
+  svName   String
+  enName   String
   priority Int?
 
   categories Category[]
 }
 
 model Category {
-  id Int @id @default(autoincrement())
-  slug String @unique
+  id              Int           @id @default(autoincrement())
+  slug            String        @unique
   superCategoryId Int
-  superCategory SuperCategory @relation(fields: [superCategoryId], references: [id])
-  svName String
-  enName String
-  priority Int?
+  superCategory   SuperCategory @relation(fields: [superCategoryId], references: [id])
+  svName          String
+  enName          String
+  priority        Int?
 
-  documents Document[]
+  documents      Document[]
   meetingMinutes MeetingMinutes[]
 }
 
 model Document {
-  id    Int    @id @default(autoincrement())
-  slug String @unique
+  id         Int      @id @default(autoincrement())
+  slug       String   @unique
   categoryId Int
-  category Category @relation(fields: [categoryId], references: [id])
-  svName  String
-  enName  String
-  priority Int?
+  category   Category @relation(fields: [categoryId], references: [id])
+  svName     String
+  enName     String
+  priority   Int?
 
   uploads Upload[]
 }
 
 model MeetingMinutes {
-  hash String @id
+  hash        String   @id
   meetingDate DateTime
-  createdAt DateTime @default(now())
-  categoryId Int
-  category Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
 }
 
 model Upload {
-  hash String @id
+  hash       String    @id
   documentId Int
-  document Document @relation(fields: [documentId], references: [id])
-  revisedAt DateTime?
-  createdAt DateTime @default(now())
+  document   Document  @relation(fields: [documentId], references: [id])
+  revisedAt  DateTime?
+  createdAt  DateTime  @default(now())
 }
-

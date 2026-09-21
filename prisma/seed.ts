@@ -20,7 +20,7 @@ await prisma.document.deleteMany({})
 await prisma.category.deleteMany({})
 await prisma.superCategory.deleteMany({})
 
-await prisma.category.createMany({
+await prisma.superCategory.createMany({
     data: [
         {
             id: 1,
