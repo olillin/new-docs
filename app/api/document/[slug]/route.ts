@@ -28,17 +28,16 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<Params> }) {
         },
     })
 
-    if (document != null) {
-        const upload: Upload | undefined = document.uploads[0]
-        if (upload == undefined) {
-            return createApiError(404, 'Document has no uploads')
-        }
-        return NextResponse.redirect(
-            createAbsoluteUrl(`/uploads/${upload.hash}`)
-        )
+    if (document == null) {
+        return createApiError(404, `Unknown document "${params.slug}"`)
     }
 
-    return createApiError(404, `Unknown document "${params.slug}"`)
+    const upload: Upload | undefined = document.uploads[0]
+    if (upload == undefined) {
+        return createApiError(404, 'Document has no uploads')
+    }
+
+    return NextResponse.redirect(createAbsoluteUrl(`/uploads/${upload.hash}`))
 }
 
 export async function POST(req: NextRequest, ctx: { params: Promise<Params> }) {

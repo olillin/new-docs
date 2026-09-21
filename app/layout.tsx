@@ -2,11 +2,6 @@ import type { Metadata, Viewport } from 'next'
 
 import './globals.css'
 import { ToastProvider } from '@heroui/react'
-import { Suspense } from 'react'
-
-import { PageFooter } from '@/app/ui/PageFooter'
-import { PageNavigation } from '@/app/ui/PageNavigation/PageNavigation'
-import { PageNavigationSkeleton } from '@/app/ui/PageNavigation/PageNavigationSkeleton'
 
 export const metadata: Metadata = {
     title: 'IT Student Division Documents',
@@ -19,7 +14,7 @@ export const viewport: Viewport = {
     colorScheme: 'dark',
 }
 
-export default async function RootLayout({
+export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode
@@ -31,19 +26,7 @@ export default async function RootLayout({
                 data-theme="dark"
             >
                 <ToastProvider />
-                <div className="mx-24 min-h-screen w-auto px-4 py-8 pb-16 md:px-0">
-                    <header className="mb-6">
-                        <h1 className="mb-2 text-2xl font-semibold tracking-tight md:text-4xl">
-                            IT Student Division Documents
-                        </h1>
-                    </header>
-
-                    <Suspense fallback={<PageNavigationSkeleton />}>
-                        <PageNavigation />
-                    </Suspense>
-                    <main className="my-12">{children}</main>
-                    <PageFooter />
-                </div>
+                {children}
             </body>
         </html>
     )

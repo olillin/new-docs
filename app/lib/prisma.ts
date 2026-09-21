@@ -19,3 +19,9 @@ export type CategoryWithDocumentsAndMeetingMinutes = Prisma.CategoryGetPayload<{
         meetingMinutes: true
     }
 }>
+
+export type DocumentWithUploads = Prisma.DocumentGetPayload<{
+    include: {
+        uploads: true
+    }
+}>
