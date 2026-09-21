@@ -9,9 +9,7 @@ export default defineConfig({
         comments: false,
     },
     transform: {
-        typescript: {
-            onlyRemoveTypeImports: true,
-        },
+        typescript: {},
     },
     tsconfig: true,
 })

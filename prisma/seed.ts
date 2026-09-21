@@ -6,9 +6,9 @@ import * as path from 'node:path'
 import type {
     MeetingMinutesCreateManyInput,
     UploadCreateManyInput,
-} from '@/app/generated/prisma/models'
+} from '@/generated/prisma/models'
 
-import { PrismaClient } from '@/app/generated/prisma/client'
+import { PrismaClient } from '@/generated/prisma/client'
 
 const connectionString = process.env.DATABASE_URL!
 const adapter = new PrismaPg({ connectionString })

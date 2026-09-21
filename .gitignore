@@ -3,8 +3,7 @@
 bundle/
 secrets/
 temp/
-app/generated/
-data/calendars/*.ics
+src/generated/
 
 .vscode/
 
