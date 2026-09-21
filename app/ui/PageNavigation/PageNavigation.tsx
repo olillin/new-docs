@@ -1,13 +1,18 @@
 import { prisma } from '@/app/lib/prisma'
 
-import { PageNavigationList } from './PageNavigationList'
+import { PageNavigationItem, PageNavigationList } from './PageNavigationList'
 
 export async function PageNavigation() {
-    const categories = await prisma.category.findMany({
+    const superCategories = await prisma.superCategory.findMany({
         orderBy: {
             priority: 'asc',
         },
     })
 
-    return <PageNavigationList categories={categories} />
+    const items: PageNavigationItem[] = superCategories.map(category => ({
+        ...category,
+        slug: 'category/' + category.slug,
+    }))
+
+    return <PageNavigationList items={items} />
 }

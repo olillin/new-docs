@@ -7,16 +7,14 @@ import { Category, MeetingMinutes } from '@/app/generated/prisma/browser'
 import { joinPath, toIsoDateString } from '../lib/util'
 
 export function MeetingMinutesCard({
-    baseUrl,
     category,
     minutes,
 }: {
-    baseUrl?: string
     category: Category
     minutes: MeetingMinutes
 }) {
     return (
-        <Link href={joinPath(baseUrl ?? '/' + category.slug, minutes.hash)}>
+        <Link href={joinPath('/uploads', minutes.hash)}>
             <Card>
                 <ScrollText />
                 <Card.Header>

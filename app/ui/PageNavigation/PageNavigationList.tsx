@@ -1,16 +1,23 @@
 'use client'
 
+import type { Key } from 'react'
+
 import clsx from 'clsx'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ReactNode } from 'react'
 
-import { Category } from '@/app/generated/prisma/browser'
+export type PageNavigationItem = {
+    id: Key
+    slug: string
+    svName: string
+    enName: string
+}
 
 export function PageNavigationList({
-    categories,
+    items,
 }: {
-    categories?: Category[]
+    items?: PageNavigationItem[]
 }) {
     const pathname = usePathname()
 
@@ -22,16 +29,16 @@ export function PageNavigationList({
             <NavigationItem href="/" selected={pathname === '/'}>
                 Home
             </NavigationItem>
-            {categories?.map(category => {
-                const href = `/${category.slug}`
+            {items?.map(item => {
+                const href = `/${item.slug}`
 
                 return (
                     <NavigationItem
-                        key={category.id}
+                        key={item.id}
                         href={href}
                         selected={pathname === href}
                     >
-                        {category.svName}
+                        {item.svName}
                     </NavigationItem>
                 )
             })}

@@ -6,7 +6,7 @@ import { createApiError } from '@/app/lib/responses'
 import { saveUpload } from '@/app/lib/upload'
 import { createAbsoluteUrl } from '@/app/lib/util'
 
-type Params = { category: string; slug: string }
+type Params = { slug: string }
 
 export async function GET(_req: NextRequest, ctx: { params: Promise<Params> }) {
     const params = await ctx.params
@@ -14,9 +14,6 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<Params> }) {
     // Serve latest upload of document
     const document = await prisma.document.findFirst({
         where: {
-            category: {
-                slug: params.category,
-            },
             slug: params.slug,
         },
         include: {
@@ -41,26 +38,7 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<Params> }) {
         )
     }
 
-    // Serve meeting minutes
-    const minutes = await prisma.meetingMinutes.findFirst({
-        where: {
-            category: {
-                slug: params.category,
-            },
-            hash: params.slug,
-        },
-    })
-
-    if (minutes != null) {
-        return NextResponse.redirect(
-            createAbsoluteUrl(`/uploads/${minutes.hash}`)
-        )
-    }
-
-    return createApiError(
-        404,
-        `Unknown document "${params.slug}" in category "${params.category}"`
-    )
+    return createApiError(404, `Unknown document "${params.slug}"`)
 }
 
 export async function POST(req: NextRequest, ctx: { params: Promise<Params> }) {
@@ -70,9 +48,6 @@ export async function POST(req: NextRequest, ctx: { params: Promise<Params> }) {
 
     const document = await prisma.document.findFirst({
         where: {
-            category: {
-                slug: params.category,
-            },
             slug: params.slug,
         },
     })
