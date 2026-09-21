@@ -11,3 +11,7 @@ export function toIsoDateString(date: Date): string {
 export function createAbsoluteUrl(path: string): URL {
     return new URL(path, env.BASE_URL)
 }
+
+export function createUploadUrl(hash: string): URL {
+    return new URL(`/api/upload/${hash}`, env.BASE_URL)
+}

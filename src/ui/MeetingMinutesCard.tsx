@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import type { Category, MeetingMinutes } from '@/generated/prisma/browser'
 
-import { joinPath, toIsoDateString } from '@/lib/util'
+import { createUploadUrl, toIsoDateString } from '@/lib/util'
 
 export function MeetingMinutesCard({
     category,
@@ -14,7 +14,7 @@ export function MeetingMinutesCard({
     minutes: MeetingMinutes
 }) {
     return (
-        <Link href={joinPath('/uploads', minutes.hash)}>
+        <Link href={createUploadUrl(minutes.hash).pathname}>
             <Card>
                 <ScrollText />
                 <Card.Header>

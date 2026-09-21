@@ -4,7 +4,7 @@ import { type Upload, Prisma } from '@/generated/prisma/client'
 import { prisma } from '@/lib/prisma'
 import { createApiError } from '@/lib/responses'
 import { saveUpload } from '@/lib/upload'
-import { createAbsoluteUrl } from '@/lib/util'
+import { createUploadUrl } from '@/lib/util'
 
 type Params = { slug: string }
 
@@ -37,7 +37,7 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<Params> }) {
         return createApiError(404, 'Document has no uploads')
     }
 
-    return NextResponse.redirect(createAbsoluteUrl(`/uploads/${upload.hash}`))
+    return NextResponse.redirect(createUploadUrl(upload.hash))
 }
 
 export async function POST(req: NextRequest, ctx: { params: Promise<Params> }) {
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<Params> }) {
     }
 
     const headers = new Headers()
-    headers.set('Location', createAbsoluteUrl(`/uploads/${hash}`).href)
+    headers.set('Location', createUploadUrl(hash).href)
 
     return new NextResponse('OK', {
         status: 201,

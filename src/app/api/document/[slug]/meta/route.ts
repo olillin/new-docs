@@ -4,7 +4,7 @@ import type { Upload } from '@/generated/prisma/client'
 
 import { prisma } from '@/lib/prisma'
 import { createApiError } from '@/lib/responses'
-import { createAbsoluteUrl } from '@/lib/util'
+import { createUploadUrl } from '@/lib/util'
 
 type Params = { slug: string }
 
@@ -39,6 +39,6 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<Params> }) {
 
     return NextResponse.json({
         status: 'OK',
-        upload: createAbsoluteUrl(`/uploads/${upload.hash}`).href,
+        upload: createUploadUrl(upload.hash).href,
     })
 }
