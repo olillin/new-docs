@@ -18,6 +18,26 @@ await prisma.meetingMinutes.deleteMany({})
 await prisma.upload.deleteMany({})
 await prisma.document.deleteMany({})
 await prisma.category.deleteMany({})
+await prisma.superCategory.deleteMany({})
+
+await prisma.category.createMany({
+    data: [
+        {
+            id: 1,
+            svName: 'Dokument',
+            enName: 'Documents',
+            slug: 'documents',
+            priority: 1,
+        },
+        {
+            id: 2,
+            svName: 'Sektionsmötesprotokoll',
+            enName: 'Division meeting minutes',
+            slug: 'division-meeting-minutes',
+            priority: 2,
+        },
+    ],
+})
 
 await prisma.category.createMany({
     data: [
@@ -26,6 +46,7 @@ await prisma.category.createMany({
             svName: 'Verksamhetsdokument',
             enName: 'Operational Documents',
             slug: 'operational-documents',
+            superCategoryId: 1,
             priority: 1,
         },
         {
@@ -33,6 +54,7 @@ await prisma.category.createMany({
             svName: 'Policier',
             enName: 'Policies',
             slug: 'policies',
+            superCategoryId: 1,
             priority: 3,
         },
         {
@@ -40,6 +62,7 @@ await prisma.category.createMany({
             svName: 'Sektionsmötesprotokoll',
             enName: 'Division meeting minutes',
             slug: 'division-meeting-minutes',
+            superCategoryId: 2,
             priority: 2,
         },
     ],

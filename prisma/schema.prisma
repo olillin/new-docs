@@ -11,9 +11,21 @@ datasource db {
   provider = "postgresql"
 }
 
+model SuperCategory {
+  id Int @id @default(autoincrement())
+  slug String @unique
+  svName String
+  enName String
+  priority Int?
+
+  categories Category[]
+}
+
 model Category {
   id Int @id @default(autoincrement())
   slug String @unique
+  superCategoryId Int
+  superCategory SuperCategory @relation(fields: [superCategoryId], references: [id])
   svName String
   enName String
   priority Int?
