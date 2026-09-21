@@ -26,6 +26,7 @@ jobs:
             - name: Install pnpm dependencies
               run: pnpm ci
             - run: pnpm prisma generate
+            - run: pnpm typecheck
             - run: pnpm build
     # test:
     #     runs-on: ubuntu-latest
