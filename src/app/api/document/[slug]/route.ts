@@ -4,7 +4,7 @@ import { type Upload, Prisma } from '@/generated/prisma/client'
 import { prisma } from '@/lib/prisma'
 import { createApiError } from '@/lib/responses'
 import { saveUpload } from '@/lib/upload'
-import { createUploadUrl } from '@/lib/util'
+import { createUploadUrl } from '@/lib/url'
 
 type Params = { slug: string }
 
