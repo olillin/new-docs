@@ -21,6 +21,12 @@ function variableOrFile(
 export const env = createEnv({
     server: {
         NODE_ENV: z.enum(['production', 'development', 'test']),
+        GAMMA_CLIENT_ID: z.string(),
+        GAMMA_CLIENT_SECRET: z.string(),
+        GAMMA_API_KEY_ID: z.string(),
+        GAMMA_API_KEY_SECRET: z.string(),
+        GAMMA_REDIRECT_URI: z.string().optional(),
+        JWT_SECRET: z.string(),
         DATABASE_URL: z.string(),
     },
     shared: {
@@ -34,6 +40,15 @@ export const env = createEnv({
     // Experimental settings infer runtime server variable values from names
     runtimeEnv: {
         NODE_ENV: variableOrFile('NODE_ENV', process.env),
+        GAMMA_CLIENT_ID: variableOrFile('GAMMA_CLIENT_ID', process.env),
+        GAMMA_CLIENT_SECRET: variableOrFile('GAMMA_CLIENT_SECRET', process.env),
+        GAMMA_API_KEY_ID: variableOrFile('GAMMA_API_KEY_ID', process.env),
+        GAMMA_API_KEY_SECRET: variableOrFile(
+            'GAMMA_API_KEY_SECRET',
+            process.env
+        ),
+        GAMMA_REDIRECT_URI: variableOrFile('GAMMA_REDIRECT_URI', process.env),
+        JWT_SECRET: variableOrFile('JWT_SECRET', process.env),
         DATABASE_URL: variableOrFile('DATABASE_URL', process.env),
         BASE_URL: variableOrFile('BASE_URL', process.env),
         NEXT_PUBLIC_WEB_VERSION: process.env.NEXT_PUBLIC_WEB_VERSION,
