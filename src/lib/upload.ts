@@ -81,3 +81,37 @@ export async function saveUpload(
     console.log(`Saved upload ${hash}`)
     return hash
 }
+
+/**
+ * Save meeting minutes to the uploads directory.
+ * @param file The file to save.
+ * @param categoryId The category to save the minutes to.
+ * @param meetingDate The date when the meeting took place.
+ * @returns The file hash/name.
+ */
+export async function saveMeetingMinutes(
+    file: File,
+    categoryId: number,
+    meetingDate: Date
+): Promise<string> {
+    const bytes = await file.bytes()
+    const hash = createHash('sha256').update(bytes).digest('hex')
+
+    await prisma.$transaction(async tx => {
+        await tx.meetingMinutes.create({
+            data: {
+                hash,
+                categoryId,
+                meetingDate,
+            },
+        })
+
+        await fs.writeFile(
+            path.resolve(process.cwd(), uploadsDirectoryName, hash),
+            bytes
+        )
+    })
+
+    console.log(`Saved meeting minutes upload ${hash}`)
+    return hash
+}
