@@ -22,7 +22,7 @@ export function CompactHeader({
     endItems,
 }: CompactHeaderProps): ReactNode {
     return (
-        <header className="h-10 bg-[#0a0a0a] px-4 py-2 gap-6 grid grid-cols-[max-content_1fr] grid-rows-1 relative">
+        <header className="relative grid h-10 grid-cols-[max-content_1fr] grid-rows-1 gap-6 bg-[#0a0a0a] px-4 py-2">
             <Link
                 href="/"
                 className="flex h-full flex-row flex-nowrap items-center gap-2"
@@ -38,7 +38,7 @@ export function CompactHeader({
                 <span className="text-lg font-bold tracking-tight">Docs</span>
             </Link>
 
-            <span className="flex flex-row flex-nowrap justify-between h-full gap-4">
+            <span className="flex h-full flex-row flex-nowrap justify-between gap-4">
                 {startItems ? (
                     <HeaderItemList items={startItems} />
                 ) : (
@@ -58,7 +58,7 @@ function HeaderItemList({
     className?: string
 }): ReactNode {
     return (
-        <span className={'flex flex-row flex-nowrap h-full gap-2 ' + className}>
+        <span className={'flex h-full flex-row flex-nowrap gap-2 ' + className}>
             {items?.map((item, i) => (
                 <HeaderItem key={i} {...item} />
             ))}

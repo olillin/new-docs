@@ -31,7 +31,7 @@ export function DocumentViewer({
             <main>
                 <iframe src={iframeUrl} width="100%" height="100%" />
             </main>
-            <aside className="flex flex-col h-full min-h-0">
+            <aside className="flex h-full min-h-0 flex-col">
                 <DocumentHistory
                     uploads={document.uploads}
                     onSelectUpload={setUpload}

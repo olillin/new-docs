@@ -24,7 +24,7 @@ export function DocumentHistory({
     return (
         <div
             className={
-                'relative h-full flex-1 max-h-full max-w-[50vw] overflow-hidden transition transition-[width] motion-reduce:transition-none ' +
+                'relative h-full max-h-full max-w-[50vw] flex-1 overflow-hidden transition transition-[width] motion-reduce:transition-none ' +
                 className
             }
         >
