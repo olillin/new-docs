@@ -8,7 +8,7 @@ import z from 'zod'
 import { checkClientSecret, getApiClientWithSecretHash } from '@/lib/client'
 import { createGammaAuthorizationCode } from '@/lib/gamma'
 import { createApiError, createJwtResponse } from '@/lib/responses'
-import { signApiClientJwtPayload, signUserJwtPayload } from '@/lib/token.js'
+import { signApiClientJwtPayload, signUserJwtPayload } from '@/lib/token'
 
 export const AuthorizationCodeRequestBody = z.object({
     grant_type: z.literal('authorization_code'),
@@ -30,11 +30,20 @@ export type ClientCredentialsRequestBody = z.infer<
 export const TokenRequestBody = AuthorizationCodeRequestBody.or(
     ClientCredentialsRequestBody
 )
+export type TokenRequestBody = z.infer<typeof TokenRequestBody>
 
-export default async function POST(
-    request: NextRequest
-): Promise<NextResponse> {
-    const body = TokenRequestBody.parse(await request.json())
+export async function POST(request: NextRequest): Promise<NextResponse> {
+    let body: TokenRequestBody
+    const contentType = request.headers.get('Content-Type')
+    if (contentType === 'application/x-www-form-urlencoded') {
+        const formData = await request.formData()
+        const formDataObject = Object.fromEntries(formData.entries())
+        body = TokenRequestBody.parse(formDataObject)
+    } else if (contentType === 'application/json') {
+        body = TokenRequestBody.parse(await request.json())
+    } else {
+        return createApiError(400, 'Unsupported request body type')
+    }
 
     const grantType = body.grant_type
     if (grantType === 'authorization_code') {

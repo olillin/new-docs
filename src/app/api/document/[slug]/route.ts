@@ -42,6 +42,7 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<Params> }) {
 }
 
 export async function POST(req: NextRequest, ctx: { params: Promise<Params> }) {
+    // TODO: Also check Authorization header
     const session = await getSession()
     if (!session?.is_admin) {
         return createApiError(401, 'Unauthorized')
