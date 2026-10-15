@@ -8,9 +8,23 @@ services:
         image: 'ghcr.io/olillin/new-docs:latest'
         restart: unless-stopped
         secrets:
+            - jwt-secret
+            - gamma-client-id
+            - gamma-client-secret
+            - gamma-api-key-id
+            - gamma-api-key-secret
             - database-url
         environment:
             NODE_ENV: production
+            BASE_URL: <your base URL>
+            JWT_ISSUER: <your domain name>
+            # JWT_EXPIRES_IN: 14400
+            JWT_SECRET: /run/secrets/jwt-secret
+            GAMMA_CLIENT_ID_FILE: /run/secrets/gamma-client-id
+            GAMMA_CLIENT_SECRET_FILE: /run/secrets/gamma-client-secret
+            GAMMA_API_KEY_ID_FILE: /run/secrets/gamma-api-key-id
+            GAMMA_API_KEY_SECRET_FILE: /run/secrets/gamma-api-key-secret
+            # GAMMA_REDIRECT_URI: <BASE_URL>/callback
             DATABASE_URL_FILE: /run/secrets/database-url
         volumes:
             - uploads:/app/uploads
@@ -21,7 +35,7 @@ services:
                 condition: service_healthy
     db:
         image: postgres:18
-        restart: always
+        restart: unless-stopped
         user: postgres
         secrets:
             - postgres-password
@@ -41,6 +55,16 @@ volumes:
     db-data:
     uploads:
 secrets:
+    jwt-secret:
+        file: secrets/jwt-secret.txt
+    gamma-client-id:
+        file: secrets/gamma-client-id.txt
+    gamma-client-secret:
+        file: secrets/gamma-client-secret.txt
+    gamma-api-key-id:
+        file: secrets/gamma-api-key-id.txt
+    gamma-api-key-secret:
+        file: secrets/gamma-api-key-secret.txt
     database-url:
         file: secrets/database-url.txt
     postgres-password:
