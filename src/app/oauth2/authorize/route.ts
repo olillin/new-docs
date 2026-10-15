@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server'
 
-import {
-    createGammaAuthorizationCode,
-    generateAndStoreRandomState,
-} from '@/lib/session'
+import { createGammaAuthorizationCode } from '@/lib/gamma'
+import { generateAndStoreRandomState } from '@/lib/session'
 
 export async function GET() {
     let state: string

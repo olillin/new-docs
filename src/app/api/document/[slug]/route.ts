@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { type Upload, Prisma } from '@/generated/prisma/client'
 import { prisma } from '@/lib/prisma'
 import { createApiError } from '@/lib/responses'
+import { getSession } from '@/lib/session'
 import { saveUpload } from '@/lib/upload'
 import { createUploadUrl } from '@/lib/url'
 
@@ -41,7 +42,10 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<Params> }) {
 }
 
 export async function POST(req: NextRequest, ctx: { params: Promise<Params> }) {
-    // TODO: Add user/API authentication
+    const session = await getSession()
+    if (!session?.is_admin) {
+        return createApiError(401, 'Unauthorized')
+    }
 
     const params = await ctx.params
 

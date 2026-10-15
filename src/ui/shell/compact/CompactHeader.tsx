@@ -13,11 +13,13 @@ export type CompactHeaderItem = {
 }
 
 export type CompactHeaderProps = {
+    title?: string
     startItems?: CompactHeaderItem[]
     endItems?: CompactHeaderItem[]
 }
 
 export function CompactHeader({
+    title = 'Docs',
     startItems,
     endItems,
 }: CompactHeaderProps): ReactNode {
@@ -35,7 +37,9 @@ export function CompactHeader({
                         sizes="24px"
                     />
                 </span>
-                <span className="text-lg font-bold tracking-tight">Docs</span>
+                <span className="text-lg font-bold tracking-tight">
+                    {title}
+                </span>
             </Link>
 
             <span className="flex h-full flex-row flex-nowrap justify-between gap-4">

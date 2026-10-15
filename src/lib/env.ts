@@ -27,6 +27,8 @@ export const env = createEnv({
         GAMMA_API_KEY_SECRET: z.string(),
         GAMMA_REDIRECT_URI: z.string().optional(),
         JWT_SECRET: z.string(),
+        JWT_EXPIRES_IN: z.string().optional(),
+        JWT_ISSUER: z.string().optional(),
         DATABASE_URL: z.string(),
     },
     shared: {
@@ -49,6 +51,8 @@ export const env = createEnv({
         ),
         GAMMA_REDIRECT_URI: variableOrFile('GAMMA_REDIRECT_URI', process.env),
         JWT_SECRET: variableOrFile('JWT_SECRET', process.env),
+        JWT_EXPIRES_IN: variableOrFile('JWT_EXPIRES_IN', process.env),
+        JWT_ISSUER: variableOrFile('JWT_ISSUER', process.env),
         DATABASE_URL: variableOrFile('DATABASE_URL', process.env),
         BASE_URL: variableOrFile('BASE_URL', process.env),
         NEXT_PUBLIC_WEB_VERSION: process.env.NEXT_PUBLIC_WEB_VERSION,

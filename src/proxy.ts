@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse, type ProxyConfig } from 'next/server'
 
-import { isAdmin, verifySession } from '@/lib/session'
+import { verifySession } from '@/lib/session'
 
 import { createAbsoluteUrl } from './lib/url'
 
@@ -24,8 +24,9 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
         const unauthorizedPage = createAbsoluteUrl('/')
 
         // Verify session and redirect if not authenticated
+        let session
         try {
-            await verifySession()
+            session = await verifySession()
         } catch (e) {
             // Do not log errors for when redirect() is called in verifySession(), this is an expected error.
             const isRedirectError =
@@ -42,11 +43,7 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
             return NextResponse.redirect(unauthorizedPage)
         }
 
-        const admin = await isAdmin().catch(reason => {
-            console.error('Failed to check admin status:', reason)
-            return false
-        })
-        if (!admin) {
+        if (!session.is_admin) {
             return NextResponse.redirect(unauthorizedPage)
         }
     }

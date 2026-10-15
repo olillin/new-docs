@@ -155,12 +155,6 @@ const uploads = [
 const meetingMinutes = [
     // Student Division Meetings
     {
-        hash: '9818dfaf8303d968b60f5d55648032e1743382ea342b7970c544d1533f3fb58f',
-        categoryId: 3,
-        meetingDate: new Date('2026-12-11'),
-        createdAt: new Date('2026-12-20'),
-    },
-    {
         hash: '78d83dd592ba2a0f9b8cf91198629d9fa724089b28a9514968ea39f095e92277',
         categoryId: 3,
         meetingDate: new Date('2026-02-26'),
@@ -171,6 +165,12 @@ const meetingMinutes = [
         categoryId: 3,
         meetingDate: new Date('2026-05-19'),
         createdAt: new Date('2026-06-19'),
+    },
+    {
+        hash: '9818dfaf8303d968b60f5d55648032e1743382ea342b7970c544d1533f3fb58f',
+        categoryId: 3,
+        meetingDate: new Date('2025-12-11'),
+        createdAt: new Date('2025-12-20'),
     },
 ] as const satisfies MeetingMinutesCreateManyInput[]
 

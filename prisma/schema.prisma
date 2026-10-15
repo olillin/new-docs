@@ -11,6 +11,16 @@ datasource db {
   provider = "postgresql"
 }
 
+// Administration
+model ApiClient {
+  id      String @id @default(uuid())
+  name    String @unique
+  salt    String
+  secret  String
+  scope   String
+}
+
+// Documents
 model SuperCategory {
   id       Int    @id @default(autoincrement())
   slug     String @unique
@@ -61,3 +71,4 @@ model Upload {
   revisedAt  DateTime?
   createdAt  DateTime  @default(now())
 }
+

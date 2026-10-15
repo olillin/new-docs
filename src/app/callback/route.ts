@@ -1,14 +1,9 @@
 import { userAvatarUrl } from 'gammait/urls'
 import { NextRequest, NextResponse } from 'next/server'
 
-import type { SessionProfile } from '@/lib/session'
-
-import {
-    createGammaAuthorizationCode,
-    createSession,
-    deleteState,
-    readState,
-} from '@/lib/session'
+import { createGammaAuthorizationCode } from '@/lib/gamma'
+import { createSession, deleteState, readState } from '@/lib/session'
+import { signUserJwtPayload } from '@/lib/token'
 import { createAbsoluteUrl } from '@/lib/url'
 
 export async function GET(req: NextRequest) {
@@ -64,16 +59,14 @@ export async function GET(req: NextRequest) {
 
     const userInfo = await authorizationCode.userInfo()
 
-    const profile: SessionProfile = {
+    // Create a new session
+    const jwt = await signUserJwtPayload({
         sub: userInfo.sub,
-        gamma_id: userInfo.sub,
         nickname: userInfo.nickname,
         picture: userAvatarUrl(userInfo.sub),
-    }
-
-    // Create a new session
-    await createSession(profile)
+    })
+    await createSession(jwt)
 
     // Redirect to homepage
-    return NextResponse.redirect(createAbsoluteUrl('/'))
+    return NextResponse.redirect(createAbsoluteUrl('/admin'))
 }
