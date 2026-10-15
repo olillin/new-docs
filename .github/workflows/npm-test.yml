@@ -25,9 +25,12 @@ jobs:
                   cache: pnpm
             - name: Install pnpm dependencies
               run: pnpm ci
-            - run: pnpm prisma generate
-            - run: pnpm typecheck
-            - run: pnpm build
+            - name: Build Next.js
+              run: |
+                  export SKIP_ENV_VALIDATION=1
+                  pnpm build
+            - name: Run typechecker
+              run: pnpm typecheck
     # test:
     #     runs-on: ubuntu-latest
     #     needs: build
