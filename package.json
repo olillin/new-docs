@@ -10,7 +10,8 @@
         "typecheck": "tsc --noEmit",
         "format": "oxfmt",
         "format:check": "oxfmt --check",
-        "lint": "oxlint"
+        "lint": "oxlint",
+        "openapi:generate": "NODE_OPTIONS='--conditions react-server' tsx node_modules/next-rest-framework/dist/cli/index.js generate"
     },
     "dependencies": {
         "@exodus/bytes": "^1.16.0",
@@ -49,6 +50,7 @@
         "oxlint-tsgolint": "^7.0.2004",
         "postcss": "^8.5.30",
         "rolldown": "^1.2.14",
+        "server-only": "^0.0.1",
         "tailwindcss": "^4.3.3",
         "tsx": "^4.23.15",
         "typescript": "^7.0.2"

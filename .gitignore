@@ -4,6 +4,7 @@ bundle/
 secrets/
 temp/
 src/generated/
+public/openapi.json
 
 .vscode/
 

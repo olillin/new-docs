@@ -49,6 +49,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # variables. Read more: https://create.t3.gg/en/deployment/docker
 ENV SKIP_ENV_VALIDATION=1
 
+# Generate OpenAPI specification
+RUN pnpm openapi:generate
+
 # Build Next.js application
 # If you want to speed up Docker rebuilds, you can cache the build artifacts
 # by adding: --mount=type=cache,target=/app/.next/cache
