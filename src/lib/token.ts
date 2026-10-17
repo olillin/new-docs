@@ -14,7 +14,7 @@ const jwtIssuer = env.JWT_ISSUER ?? 'cthit-docs'
 
 export function signUserJwtPayload(
     payload: UserJwtPayload
-): Promise<JwtWithToken> {
+): Promise<JwtWithToken & UserJwtPayload> {
     return new Promise((resolve, reject) => {
         const expireSeconds: number =
             env.JWT_EXPIRES_IN !== undefined
@@ -45,7 +45,7 @@ export function signUserJwtPayload(
                         resolve({
                             access_token: token,
                             token_type: 'Bearer',
-                            ...token_content,
+                            ...(token_content as UserJwtPayload),
                         })
                     }
                 }
@@ -62,7 +62,7 @@ export function signUserJwtPayload(
 
 export function signApiClientJwtPayload(
     payload: ApiClientJwtPayload
-): Promise<JwtWithToken> {
+): Promise<JwtWithToken & ApiClientJwtPayload> {
     return new Promise((resolve, reject) => {
         const expireSeconds: number =
             env.JWT_EXPIRES_IN !== undefined
@@ -93,7 +93,7 @@ export function signApiClientJwtPayload(
                         resolve({
                             access_token: token,
                             token_type: 'Bearer',
-                            ...token_content,
+                            ...(token_content as ApiClientJwtPayload),
                         })
                     }
                 }

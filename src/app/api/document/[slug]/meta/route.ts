@@ -1,33 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { route, routeOperation, TypedNextResponse } from 'next-rest-framework'
 
-import { prisma, type DocumentWithUploads } from '@/lib/prisma'
-import { createApiError } from '@/lib/responses'
+import { getDocumentBySlug } from '@/actions/documents'
+import { ApiError, createApiErrorOutputs } from '@/lib/api/responses'
+import { DocumentSlugParams, DocumentWithUploads } from '@/lib/api/schemas'
 
-type Params = { slug: string }
-
-export async function GET(_req: NextRequest, ctx: { params: Promise<Params> }) {
-    const params = await ctx.params
-
-    const document = await prisma.document.findFirst({
-        where: {
-            slug: params.slug,
-        },
-        include: {
-            uploads: {
-                orderBy: [
-                    {
-                        revisedAt: 'desc',
-                    },
-                    { createdAt: 'desc' },
-                ],
-            },
-        },
+export const { GET } = route({
+    getDocumentMeta: routeOperation({
+        method: 'GET',
     })
+        .input({
+            params: DocumentSlugParams,
+        })
+        .outputs([
+            {
+                status: 200,
+                contentType: 'application/json',
+                body: DocumentWithUploads,
+            },
+            ...createApiErrorOutputs([404] as const),
+        ])
+        .handler(async (_req, { params }) => {
+            const document = await getDocumentBySlug(params.slug)
 
-    if (document == null) {
-        return createApiError(404, `Unknown document "${params.slug}"`)
-    }
+            if (document == null) {
+                return ApiError.documentNotExist
+            }
 
-    const body: DocumentWithUploads = document
-    return NextResponse.json(body)
-}
+            const body = document
+            return TypedNextResponse.json(body)
+        }),
+})

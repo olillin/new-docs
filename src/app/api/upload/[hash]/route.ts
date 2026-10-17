@@ -1,15 +1,36 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { route, routeOperation, TypedNextResponse } from 'next-rest-framework'
 
-import { createApiError } from '@/lib/responses'
+import {
+    ApiError,
+    createApiErrorOutputs,
+    type ApiErrorType,
+    type TypedNextResponseType,
+} from '@/lib/api/responses'
+import { PdfStream, UploadHashParams } from '@/lib/api/schemas'
 import { FileNotFoundError, readUploadAsStream } from '@/lib/upload'
 
-export async function GET(
-    _req: NextRequest,
-    ctx: { params: Promise<{ hash: string }> }
-) {
-    const params = await ctx.params
+export const { GET } = route({
+    getUpload: routeOperation({
+        method: 'GET',
+    })
+        .input({
+            params: UploadHashParams,
+        })
+        .outputs([
+            { status: 200, contentType: 'application/pdf', body: PdfStream },
+            ...createApiErrorOutputs([404] as const),
+        ])
+        .handler(async (_req, { params }) => {
+            return await createUploadStreamResponse(params.hash)
+        }),
+})
 
-    const { stream, size } = await readUploadAsStream(params.hash).catch(
+export async function createUploadStreamResponse(
+    hash: string
+): Promise<
+    ApiErrorType<404> | TypedNextResponseType<PdfStream, 200, 'application/pdf'>
+> {
+    const { stream, size } = await readUploadAsStream(hash).catch(
         (reason: unknown) => {
             if (!(reason instanceof FileNotFoundError)) {
                 console.error(
@@ -22,18 +43,14 @@ export async function GET(
     )
 
     if (!stream) {
-        return createApiError(404, 'Upload does not exist')
+        return ApiError.uploadNotExist
     }
 
-    const headers = new Headers()
-    headers.set('Content-Type', 'application/pdf')
-    headers.set('Content-Length', size.toString())
-
-    const res = new NextResponse(stream, {
+    return new TypedNextResponse(stream, {
         status: 200,
-        statusText: 'OK',
-        headers,
+        headers: {
+            'Content-Type': 'application/pdf',
+            'Content-Length': size.toString(),
+        },
     })
-
-    return res
 }

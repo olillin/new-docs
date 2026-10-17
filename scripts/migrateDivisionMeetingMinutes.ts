@@ -1,7 +1,7 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client'
 import { PDFParse } from 'pdf-parse'
 
-import { saveMeetingMinutes } from '@/lib/upload'
+import { saveMeetingMinutes } from '@/actions/uploads'
 
 const divisionMeetingMinutesCategoryId = 3
 

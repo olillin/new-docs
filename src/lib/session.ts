@@ -2,6 +2,7 @@ import 'server-only'
 import gamma from 'gammait'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { connection } from 'next/server'
 import { cache } from 'react'
 
 import { env } from '@/lib/env'
@@ -56,6 +57,8 @@ export async function deleteSession(): Promise<void> {
  * @returns The session if it exists and is valid.
  */
 export const verifySession = cache(async (): Promise<SessionInfo> => {
+    await connection()
+
     const session = await getSession()
 
     if (session === null) {
@@ -73,6 +76,8 @@ export const verifySession = cache(async (): Promise<SessionInfo> => {
  * @returns The session if it exists and is valid, else null.
  */
 export const getSession = cache(async (): Promise<SessionInfo | null> => {
+    await connection()
+
     const cookie = (await cookies()).get(SESSION_COOKIE)?.value
     if (cookie === undefined) return null
     const payload = verifyToken(cookie)

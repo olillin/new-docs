@@ -3,7 +3,7 @@
 import clsx from 'clsx'
 import { useState, type ReactNode } from 'react'
 
-import type { DocumentWithUploads } from '@/lib/prisma'
+import type { DocumentWithUploads } from '@/lib/api/schemas'
 
 import { DocumentHistory } from './DocumentHistory'
 

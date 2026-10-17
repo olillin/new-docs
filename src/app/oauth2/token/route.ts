@@ -1,13 +1,25 @@
-import type { NextResponse, NextRequest } from 'next/server'
-
 import { fromBase64 } from '@exodus/bytes/base64.js'
 import * as gamma from 'gammait'
 import { userAvatarUrl } from 'gammait/urls'
+import { route, routeOperation } from 'next-rest-framework'
 import z from 'zod'
 
+import type {
+    ApiClientJwtPayload,
+    JwtWithToken,
+    UserJwtPayload,
+} from '@/lib/tokenDefinitions'
+
+import {
+    ApiError,
+    createApiErrorOutputs,
+    createJwtResponse,
+    type ApiErrorTypes,
+    type JsonResponseType,
+} from '@/lib/api/responses'
+import { TokenResponse } from '@/lib/api/schemas'
 import { checkClientSecret, getApiClientWithSecretHash } from '@/lib/client'
 import { createGammaAuthorizationCode } from '@/lib/gamma'
-import { createApiError, createJwtResponse } from '@/lib/responses'
 import { signApiClientJwtPayload, signUserJwtPayload } from '@/lib/token'
 
 export const AuthorizationCodeRequestBody = z.object({
@@ -32,45 +44,68 @@ export const TokenRequestBody = AuthorizationCodeRequestBody.or(
 )
 export type TokenRequestBody = z.infer<typeof TokenRequestBody>
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
-    let body: TokenRequestBody
-    const contentType = request.headers.get('Content-Type')
-    if (contentType === 'application/x-www-form-urlencoded') {
-        const formData = await request.formData()
-        const formDataObject = Object.fromEntries(formData.entries())
-        body = TokenRequestBody.parse(formDataObject)
-    } else if (contentType === 'application/json') {
-        body = TokenRequestBody.parse(await request.json())
-    } else {
-        return createApiError(400, 'Unsupported request body type')
-    }
-
-    const grantType = body.grant_type
-    if (grantType === 'authorization_code') {
-        return await authorizationCodeFlow(body)
-    } else if (grantType === 'client_credentials') {
-        let credentials: BasicCredentials
-        if (body.client_id == undefined || body.client_secret == undefined) {
-            const authorizationHeader = request.headers.get('Authorization')
-            if (!authorizationHeader) {
-                return createApiError(401, 'Missing credentials')
+export const { POST } = route({
+    token: routeOperation({
+        method: 'POST',
+    })
+        .input({
+            body: TokenRequestBody,
+        })
+        .outputs([
+            {
+                status: 200,
+                contentType: 'application/json',
+                body: TokenResponse,
+            },
+            ...createApiErrorOutputs([400, 401, 500, 502, 504] as const),
+        ])
+        .handler(async req => {
+            let body: TokenRequestBody
+            const contentType = req.headers.get('Content-Type')
+            if (contentType === 'application/x-www-form-urlencoded') {
+                const formData = await req.formData()
+                const formDataObject = Object.fromEntries(formData.entries())
+                body = TokenRequestBody.parse(formDataObject)
+            } else if (contentType === 'application/json') {
+                body = TokenRequestBody.parse(await req.json())
+            } else {
+                return ApiError.unsupportedBodyType
             }
-            credentials = decodeBasicAuthorizationHeader(authorizationHeader)
-        } else {
-            credentials = {
-                username: body.client_id,
-                password: body.client_secret,
-            }
-        }
-        return await clientCredentialsFlow(credentials)
-    }
 
-    return createApiError(400, 'Invalid grant_type')
-}
+            const grantType = body.grant_type
+            if (grantType === 'authorization_code') {
+                return await authorizationCodeFlow(body)
+            } else if (grantType === 'client_credentials') {
+                let credentials: BasicCredentials
+                if (
+                    body.client_id == undefined ||
+                    body.client_secret == undefined
+                ) {
+                    const authorizationHeader = req.headers.get('Authorization')
+                    if (!authorizationHeader) {
+                        return ApiError.missingCredentials
+                    }
+                    credentials =
+                        decodeBasicAuthorizationHeader(authorizationHeader)
+                } else {
+                    credentials = {
+                        username: body.client_id,
+                        password: body.client_secret,
+                    }
+                }
+                return await clientCredentialsFlow(credentials)
+            }
+
+            return ApiError.invalidGrantType
+        }),
+})
 
 async function authorizationCodeFlow(
     body: AuthorizationCodeRequestBody
-): Promise<NextResponse> {
+): Promise<
+    | ApiErrorTypes<[401, 500, 502, 504]>
+    | JsonResponseType<JwtWithToken & UserJwtPayload>
+> {
     // Get token from Gamma
     const authorizationCode = createGammaAuthorizationCode()
     try {
@@ -81,19 +116,13 @@ async function authorizationCodeFlow(
             (error as NodeJS.ErrnoException)?.code === 'ECONNREFUSED'
         if (unreachable) {
             console.warn('Unable to reach Gamma when logging in user:', error)
-            return createApiError(504, 'Gamma is unreachable')
+            return ApiError.gammaUnreachable
         }
         console.error('Failed to get token from Gamma:', error)
         if (error instanceof Error && error.message.includes('400')) {
-            return createApiError(
-                401,
-                'Authorization code has already been used'
-            )
+            return ApiError.usedAuthorizationCode
         }
-        return createApiError(
-            502,
-            'Failed to get token from Gamma, your authorization code may be invalid'
-        )
+        return ApiError.gammaFailedToken
     }
 
     let userInfo: gamma.UserInfo
@@ -104,10 +133,10 @@ async function authorizationCodeFlow(
             (error as NodeJS.ErrnoException).code === 'ENOTFOUND' ||
             (error as NodeJS.ErrnoException).code === 'ECONNREFUSED'
         ) {
-            return createApiError(504, 'Gamma is unreachable')
+            return ApiError.gammaUnreachable
         }
         console.error('Failed to fetch Gamma info for login:', error)
-        return createApiError(500, 'An unexpected error occurred')
+        return ApiError.unexpected
     }
 
     try {
@@ -120,7 +149,7 @@ async function authorizationCodeFlow(
         return createJwtResponse(jwt)
     } catch (error) {
         console.error('Failed to create JWT:', error)
-        return createApiError(500, 'Failed to create JWT')
+        return ApiError.createJwtFailed
     }
 }
 
@@ -151,13 +180,16 @@ function decodeBasicAuthorizationHeader(
 
 async function clientCredentialsFlow(
     credentials: BasicCredentials
-): Promise<NextResponse> {
+): Promise<
+    | ApiErrorTypes<[401, 500]>
+    | JsonResponseType<JwtWithToken & ApiClientJwtPayload>
+> {
     const { username: clientId, password: clientSecret } = credentials
 
     // Check secret
     const client = await getApiClientWithSecretHash(clientId)
     if (!client) {
-        return createApiError(401, 'Invalid credentials')
+        return ApiError.invalidCredentials
     }
 
     const isCorrectSecret = await checkClientSecret(
@@ -166,7 +198,7 @@ async function clientCredentialsFlow(
         client.salt
     )
     if (!isCorrectSecret) {
-        return createApiError(401, 'Invalid credentials')
+        return ApiError.invalidCredentials
     }
 
     // Sign token
@@ -178,6 +210,6 @@ async function clientCredentialsFlow(
         return createJwtResponse(jwt)
     } catch (error) {
         console.error('Failed to create session:', error)
-        return createApiError(500, 'Failed to create session')
+        return ApiError.createSessionFailed
     }
 }

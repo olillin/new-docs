@@ -1,4 +1,4 @@
-import { type CategoryWithDocumentsAndMeetingMinutes } from '@/lib/prisma'
+import { type CategoryWithDocumentsAndMeetingMinutes } from '@/lib/api/schemas'
 
 import { DocumentCard } from './DocumentCard'
 import { MeetingMinutesCard } from './MeetingMinutesCard'
