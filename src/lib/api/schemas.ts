@@ -74,3 +74,14 @@ export const TokenResponse = z.union([
     ApiClientJwtPayload.extend(JwtPayloadArgs),
 ])
 export type TokenResponse = z.infer<typeof TokenResponse>
+
+// RPC Client types
+export const DocumentWithUploadsJSON = DocumentWithUploads.extend({
+    uploads: z.array(
+        DocumentUpload.extend({
+            revisedAt: z.iso.datetime().or(z.null()),
+            createdAt: z.iso.datetime(),
+        })
+    ),
+})
+export type DocumentWithUploadsJSON = z.infer<typeof DocumentWithUploadsJSON>

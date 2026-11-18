@@ -3,7 +3,7 @@
 import { rpcOperation } from 'next-rest-framework'
 import z from 'zod'
 
-import { DocumentWithUploads } from '@/lib/api/schemas'
+import { DocumentWithUploadsJSON } from '@/lib/api/schemas'
 import { prisma } from '@/lib/prisma'
 
 export const getDocumentBySlug = rpcOperation()
@@ -14,10 +14,10 @@ export const getDocumentBySlug = rpcOperation()
     .outputs([
         {
             contentType: 'application/json',
-            body: DocumentWithUploads.or(z.null()),
+            body: DocumentWithUploadsJSON.or(z.null()),
         },
     ])
-    .handler(async (slug: string): Promise<DocumentWithUploads | null> => {
+    .handler(async (slug: string): Promise<DocumentWithUploadsJSON | null> => {
         const document = await prisma.document.findFirst({
             where: {
                 slug,
@@ -34,5 +34,16 @@ export const getDocumentBySlug = rpcOperation()
             },
         })
 
-        return document
+        if (document == null) {
+            return null
+        }
+
+        return {
+            ...document,
+            uploads: document.uploads.map(upload => ({
+                ...upload,
+                revisedAt: upload.revisedAt?.toISOString() ?? null,
+                createdAt: upload.createdAt.toISOString(),
+            })),
+        }
     })
