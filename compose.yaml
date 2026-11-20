@@ -1,6 +1,6 @@
 # DO NOT USE IN PRODUCTION, THIS CONFIGURATION IS INTENTIONALLY INSECURE
 
-# This compose file runs the database for development.
+# This compose file runs the database and Gamma for development.
 # Copy .env.example to get started.
 
 name: docs-dev
@@ -11,8 +11,8 @@ services:
         restart: unless-stopped
         user: postgres
         environment:
-            - POSTGRES_DB=docs_dev
-            - POSTGRES_PASSWORD=secret-dev-password
+          POSTGRES_DB: docs_dev
+          POSTGRES_PASSWORD: secret-dev-password
         ports:
             - '5432:5432'
         healthcheck:
@@ -20,3 +20,34 @@ services:
             interval: 10s
             timeout: 5s
             retries: 5
+
+    # Gamma
+    gamma:
+      image: gamma-app:test
+      environment:
+        PRODUCTION: false
+        ADMIN_SETUP: true
+        IS_MOCKING: true
+        MOCK_CLIENT_REDIRECT_URL: http://localhost:3000/callback
+        MOCK_CLIENT_EMAIL_SCOPE: true
+        BASE_URL: http://localhost:9090
+        SERVER_PORT: 9090
+        ROOT_DEBUG_LEVEL: INFO
+        DB_HOST: gamma-db
+        DB_NAME: gamma-dev
+        DB_PASSWORD: password
+        DB_USER: postgres
+        REDIS_HOST: gamma-redis
+      ports:
+        - 9090:9090
+      restart: unless-stopped
+
+    gamma-redis:
+      image: redis:8
+
+    gamma-db:
+      image: postgres:18
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_DB: gamma-dev
+        POSTGRES_PASSWORD: password

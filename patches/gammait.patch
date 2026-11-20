@@ -1,0 +1,13 @@
+diff --git a/lib/urls.js b/lib/urls.js
+index cbcfaffbdd63abcaaac07fa88c6a6768e417f8c3..79d89e8aa033a37e2898a724a7f19fb49f481165 100644
+--- a/lib/urls.js
++++ b/lib/urls.js
+@@ -11,7 +11,7 @@ exports.groupAvatarUrl = groupAvatarUrl;
+ exports.groupBannerUrl = groupBannerUrl;
+ exports.superGroupAvatarUrl = superGroupAvatarUrl;
+ exports.superGroupBannerUrl = superGroupBannerUrl;
+-exports.GAMMA_ROOT = 'https://auth.chalmers.it';
++exports.GAMMA_ROOT = 'http://localhost:9090';
+ // #region OAuth2 endpoints
+ exports.OAUTH2_ROOT = `${exports.GAMMA_ROOT}/oauth2`;
+ exports.OAUTH2_AUTHORIZE_PATH = '/oauth2/authorize';

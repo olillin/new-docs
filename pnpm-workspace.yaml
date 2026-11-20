@@ -4,3 +4,5 @@ allowBuilds:
   msgpackr-extract: true
   prisma: true
   workerd: true
+patchedDependencies:
+  gammait: patches/gammait.patch

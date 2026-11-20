@@ -203,6 +203,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  gammait: b0583c51405748097b2eeb994cd4a5bc2b60ef2ac61039df8404a408bdb05613
+
 importers:
 
   .:
@@ -239,7 +242,7 @@ importers:
         version: 17.4.2
       gammait:
         specifier: ^1.1.0
-        version: 1.1.0(supports-color@7.2.0)
+        version: 1.1.0(patch_hash=b0583c51405748097b2eeb994cd4a5bc2b60ef2ac61039df8404a408bdb05613)(supports-color@7.2.0)
       jsonwebtoken:
         specifier: ^9.0.3
         version: 9.0.3
@@ -4635,7 +4638,7 @@ snapshots:
 
   function-bind@1.1.2: {}
 
-  gammait@1.1.0(supports-color@7.2.0):
+  gammait@1.1.0(patch_hash=b0583c51405748097b2eeb994cd4a5bc2b60ef2ac61039df8404a408bdb05613)(supports-color@7.2.0):
     dependencies:
       simple-oauth2: 5.1.0(supports-color@7.2.0)
     transitivePeerDependencies:
