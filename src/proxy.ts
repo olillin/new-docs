@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse, type ProxyConfig } from 'next/server'
 
-import { verifySession } from '@/lib/session'
+import { createAbsoluteUrl } from '@/utils/url'
 
-import { createAbsoluteUrl } from './lib/url'
+import SessionService from './services/sessionService'
 
 const protectedRoutes: RegExp[] = [
     // If any of these patterns match the user will be redirected
@@ -26,7 +26,7 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
         // Verify session and redirect if not authenticated
         let session
         try {
-            session = await verifySession()
+            session = await SessionService.verifySession()
         } catch (e) {
             // Do not log errors for when redirect() is called in verifySession(), this is an expected error.
             const isRedirectError =

@@ -1,7 +1,7 @@
 import { ErrorMessage } from '@heroui/react'
 
+import { CategoryArticle } from '@/components/CategoryArticle'
 import { prisma } from '@/lib/prisma'
-import { CategoryArticle } from '@/ui/CategoryArticle'
 
 export const instant = false
 

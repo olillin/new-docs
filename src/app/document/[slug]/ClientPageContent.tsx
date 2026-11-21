@@ -5,9 +5,9 @@ import clsx from 'clsx'
 import { HistoryIcon } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 
+import { DocumentViewer } from '@/components/DocumentViewer/DocumentViewer'
+import { CompactShell } from '@/components/shell/compact/CompactShell'
 import { useDocument } from '@/hooks/useDocument'
-import { DocumentViewer } from '@/ui/DocumentViewer/DocumentViewer'
-import { CompactShell } from '@/ui/shell/compact/CompactShell'
 
 export function ClientPageContent({ slug }: { slug: string }): ReactNode {
     const document = useDocument(slug)

@@ -1,4 +1,4 @@
-import { env } from '@/lib/env'
+import { env } from '@/environment'
 
 export function createAbsoluteUrl(path: string): URL {
     return new URL(path, env.BASE_URL)

@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 
-import { deleteSession } from '@/lib/session'
-import { createAbsoluteUrl } from '@/lib/url'
+import SessionService from '@/services/sessionService'
+import { createAbsoluteUrl } from '@/utils/url'
 
 export async function GET() {
-    await deleteSession()
+    await SessionService.deleteSession()
     return NextResponse.redirect(createAbsoluteUrl('/'))
 }

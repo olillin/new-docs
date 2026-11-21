@@ -6,7 +6,7 @@ import { Button, ScrollShadow } from '@heroui/react'
 
 import type { Upload } from '@/generated/prisma/client'
 
-import { toIsoDateString } from '@/lib/util'
+import { toIsoDateString } from '@/utils/strings'
 
 export type DocumentHistoryProps = {
     uploads: Upload[]

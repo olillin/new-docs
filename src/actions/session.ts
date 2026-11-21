@@ -4,9 +4,9 @@ import gamma from 'gammait'
 import { rpcOperation, TypedNextResponse } from 'next-rest-framework'
 import z from 'zod'
 
-import { createValidateTokenResponse } from '@/lib/api/middleware'
-import { isAdmin } from '@/lib/gamma'
+import { createValidateTokenResponse } from '@/lib/api/middleware/validateTokenMiddleware'
 import { isUserJwtPayload, SessionInfo } from '@/lib/tokenDefinitions'
+import GammaService from '@/services/gammaService'
 
 export const getSession = rpcOperation()
     .input({
@@ -30,7 +30,9 @@ export const getSession = rpcOperation()
             return null
         }
 
-        const admin = await isAdmin(parsedToken.sub as gamma.UserId)
+        const admin = await GammaService.isAdmin(
+            parsedToken.sub as gamma.UserId
+        )
         return {
             ...parsedToken,
             is_admin: admin,

@@ -2,17 +2,15 @@ import { route, routeOperation, TypedNextResponse } from 'next-rest-framework'
 import z from 'zod'
 import * as zfd from 'zod-form-data'
 
-import { getDocumentBySlug } from '@/actions/documents'
 import { saveUpload } from '@/actions/uploads'
 import { type Upload, Prisma } from '@/generated/prisma/client'
-import {
-    validateTokenMiddleware,
-    enforceAdminMiddleware,
-} from '@/lib/api/middleware'
+import enforceAdminMiddleware from '@/lib/api/middleware/enforceAdminMiddleware'
+import validateTokenMiddleware from '@/lib/api/middleware/validateTokenMiddleware'
 import { ApiError, createApiErrorOutputs } from '@/lib/api/responses'
 import { DocumentSlugParams, PdfStream } from '@/lib/api/schemas'
 import { prisma } from '@/lib/prisma'
-import { createUploadUrl } from '@/lib/url'
+import DocumentService from '@/services/documentService'
+import { createUploadUrl } from '@/utils/url'
 
 import { createUploadStreamResponse } from '../../upload/[hash]/route'
 
@@ -28,7 +26,9 @@ export const { GET, POST } = route({
             ...createApiErrorOutputs([404] as const),
         ])
         .handler(async (_req, { params }) => {
-            const document = await getDocumentBySlug(params.slug)
+            const document = await DocumentService.getDocumentBySlug(
+                params.slug
+            )
 
             if (document == null) {
                 return ApiError.documentNotExist

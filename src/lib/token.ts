@@ -1,7 +1,7 @@
 import 'server-only'
 import jwt from 'jsonwebtoken'
 
-import { env } from '@/lib/env'
+import { env } from '@/environment'
 
 import {
     ApiClientJwtPayload,

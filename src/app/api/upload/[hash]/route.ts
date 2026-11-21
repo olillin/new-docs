@@ -7,7 +7,7 @@ import {
     type TypedNextResponseType,
 } from '@/lib/api/responses'
 import { PdfStream, UploadHashParams } from '@/lib/api/schemas'
-import { FileNotFoundError, readUploadAsStream } from '@/lib/upload'
+import { FileNotFoundError, UploadService } from '@/services/uploadService'
 
 export const { GET } = route({
     getUpload: routeOperation({
@@ -30,7 +30,7 @@ export async function createUploadStreamResponse(
 ): Promise<
     ApiErrorType<404> | TypedNextResponseType<PdfStream, 200, 'application/pdf'>
 > {
-    const { stream, size } = await readUploadAsStream(hash).catch(
+    const { stream, size } = await UploadService.readUploadAsStream(hash).catch(
         (reason: unknown) => {
             if (!(reason instanceof FileNotFoundError)) {
                 console.error(

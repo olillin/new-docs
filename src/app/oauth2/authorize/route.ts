@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server'
 
 import { createGammaAuthorizationCode } from '@/lib/gamma'
-import { generateAndStoreRandomState } from '@/lib/session'
+import StateService from '@/services/stateService'
 
 export async function GET() {
     let state: string
     try {
-        state = await generateAndStoreRandomState()
+        state = await StateService.generateAndStoreRandomState()
     } catch (error) {
         console.error(
             `Failed to generate and store random state: ${String(error)}`

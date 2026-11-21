@@ -2,9 +2,9 @@ import Image from 'next/image'
 import { Suspense } from 'react'
 
 import itLogo from '@/assets/it-logo.png'
-import { PageFooter } from '@/ui/PageFooter/PageFooter'
-import { PageNavigation } from '@/ui/PageNavigation/PageNavigation'
-import { PageNavigationSkeleton } from '@/ui/PageNavigation/PageNavigationSkeleton'
+import { PageFooter } from '@/components/PageFooter/PageFooter'
+import { PageNavigation } from '@/components/PageNavigation/PageNavigation'
+import { PageNavigationSkeleton } from '@/components/PageNavigation/PageNavigationSkeleton'
 
 export default function HomeLayout({
     children,

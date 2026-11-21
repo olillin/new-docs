@@ -4,7 +4,7 @@ import { rpcOperation } from 'next-rest-framework'
 import z from 'zod'
 
 import { DocumentWithUploadsJSON } from '@/lib/api/schemas'
-import { prisma } from '@/lib/prisma'
+import DocumentService from '@/services/documentService'
 
 export const getDocumentBySlug = rpcOperation()
     .input({
@@ -18,22 +18,7 @@ export const getDocumentBySlug = rpcOperation()
         },
     ])
     .handler(async (slug: string): Promise<DocumentWithUploadsJSON | null> => {
-        const document = await prisma.document.findFirst({
-            where: {
-                slug,
-            },
-            include: {
-                uploads: {
-                    orderBy: [
-                        {
-                            revisedAt: 'desc',
-                        },
-                        { createdAt: 'desc' },
-                    ],
-                },
-            },
-        })
-
+        const document = await DocumentService.getDocumentBySlug(slug)
         if (document == null) {
             return null
         }

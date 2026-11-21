@@ -2,9 +2,10 @@ import { userAvatarUrl } from 'gammait/urls'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { createGammaAuthorizationCode } from '@/lib/gamma'
-import { createSession, deleteState, readState } from '@/lib/session'
 import { signUserJwtPayload } from '@/lib/token'
-import { createAbsoluteUrl } from '@/lib/url'
+import SessionService from '@/services/sessionService'
+import StateService from '@/services/stateService'
+import { createAbsoluteUrl } from '@/utils/url'
 
 export async function GET(req: NextRequest) {
     const code = req.nextUrl.searchParams.get('code')
@@ -24,7 +25,7 @@ export async function GET(req: NextRequest) {
         })
     }
 
-    const storedState = await readState()
+    const storedState = await StateService.readState()
     if (!storedState) {
         return new NextResponse(
             '401 Unauthorized: State has expired, please try again',
@@ -43,7 +44,7 @@ export async function GET(req: NextRequest) {
         )
     }
 
-    await deleteState()
+    await StateService.deleteState()
 
     const authorizationCode = createGammaAuthorizationCode()
     try {
@@ -65,7 +66,7 @@ export async function GET(req: NextRequest) {
         nickname: userInfo.nickname,
         picture: userAvatarUrl(userInfo.sub),
     })
-    await createSession(jwt)
+    await SessionService.createSession(jwt)
 
     // Redirect to homepage
     return NextResponse.redirect(createAbsoluteUrl('/admin'))

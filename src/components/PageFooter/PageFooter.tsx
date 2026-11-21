@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { Suspense, type ReactNode } from 'react'
 
-import { env } from '@/lib/env'
-import { getSession } from '@/lib/session'
+import { env } from '@/environment'
+import SessionService from '@/services/sessionService'
 
 import { PixelnHeart } from '../PixelnHeart'
 
@@ -48,7 +48,7 @@ export async function AdminLoginButton({
     isAdmin?: boolean
 }): Promise<ReactNode> {
     if (isAdmin === undefined) {
-        const session = await getSession()
+        const session = await SessionService.getSession()
         isAdmin = session?.is_admin
     }
     return isAdmin ? (

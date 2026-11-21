@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import Link from 'next/link'
 
-import { CompactShell } from '@/ui/shell/compact/CompactShell'
+import { CompactShell } from '@/components/shell/compact/CompactShell'
 
 export default function Layout({ children }: { children: ReactNode }) {
     return (

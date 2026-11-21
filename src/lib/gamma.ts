@@ -1,8 +1,7 @@
-import { AuthorizationCode, ClientApi, type UserId } from 'gammait'
+import { AuthorizationCode, ClientApi } from 'gammait'
 
-import { env } from '@/lib/env'
-
-import { createAbsoluteUrl } from './url'
+import { env } from '@/environment'
+import { createAbsoluteUrl } from '@/utils/url'
 
 export function createGammaAuthorizationCode(): AuthorizationCode {
     const redirectUri: string =
@@ -20,26 +19,4 @@ export function createGammaClientApi(): ClientApi {
     return new ClientApi({
         authorization: `pre-shared ${env.GAMMA_API_KEY_ID}:${env.GAMMA_API_KEY_SECRET}`,
     })
-}
-
-/**
- * Check if the user is an administrator.
- * @param userId The Gamma user ID.
- * @returns If the user is an admin.
- */
-export async function isAdmin(userId: UserId): Promise<boolean> {
-    const clientApi = createGammaClientApi()
-    try {
-        const authorities = await clientApi.getAuthoritiesFor(userId)
-        return authorities.some(authority => authority.startsWith('admin'))
-    } catch (error) {
-        if (error instanceof Error) {
-            console.warn(
-                `Failed to fetch authorities from Gamma: ${String(error)}`
-            )
-        } else {
-            console.warn('Failed to fetch authorities from Gamma')
-        }
-        return false
-    }
 }

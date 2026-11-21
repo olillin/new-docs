@@ -1,6 +1,6 @@
 import { route, routeOperation, TypedNextResponse } from 'next-rest-framework'
 
-import { validateTokenMiddleware } from '@/lib/api/middleware'
+import validateTokenMiddleware from '@/lib/api/middleware/validateTokenMiddleware'
 import { createApiErrorOutputs } from '@/lib/api/responses'
 import { TokenResponse } from '@/lib/api/schemas'
 

@@ -4,8 +4,8 @@ import Link from 'next/link'
 
 import type { Category, MeetingMinutes } from '@/generated/prisma/browser'
 
-import { createUploadUrl } from '@/lib/url'
-import { toIsoDateString } from '@/lib/util'
+import { toIsoDateString } from '@/utils/strings'
+import { createUploadUrl } from '@/utils/url'
 
 export function MeetingMinutesCard({
     category,

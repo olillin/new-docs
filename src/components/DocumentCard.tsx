@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import type { Document } from '@/generated/prisma/browser'
 
-import { joinPath, toIsoDateString } from '../lib/util'
+import { joinPath, toIsoDateString } from '@/utils/strings'
 
 export function DocumentCard({
     document,

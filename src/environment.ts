@@ -3,10 +3,11 @@ import { readFileSync } from 'node:fs'
 import * as z from 'zod'
 
 export const defaultBaseUrl = 'http://localhost:3000'
+export const defaultUploadsDirectory = './uploads/'
 
 function variableOrFile(
     name: string,
-    o: NodeJS.ProcessEnv
+    o: NodeJS.ProcessEnv = process.env
 ): string | undefined {
     if (Object.hasOwn(o, name)) {
         return o[name]
@@ -30,6 +31,7 @@ export const env = createEnv({
         JWT_EXPIRES_IN: z.string().optional(),
         JWT_ISSUER: z.string().optional(),
         DATABASE_URL: z.string(),
+        UPLOADS_DIRECTORY: z.string().default(defaultUploadsDirectory),
     },
     shared: {
         BASE_URL: z
@@ -41,20 +43,18 @@ export const env = createEnv({
     emptyStringAsUndefined: true,
     // Experimental settings infer runtime server variable values from names
     runtimeEnv: {
-        NODE_ENV: variableOrFile('NODE_ENV', process.env),
-        GAMMA_CLIENT_ID: variableOrFile('GAMMA_CLIENT_ID', process.env),
-        GAMMA_CLIENT_SECRET: variableOrFile('GAMMA_CLIENT_SECRET', process.env),
-        GAMMA_API_KEY_ID: variableOrFile('GAMMA_API_KEY_ID', process.env),
-        GAMMA_API_KEY_SECRET: variableOrFile(
-            'GAMMA_API_KEY_SECRET',
-            process.env
-        ),
-        GAMMA_REDIRECT_URI: variableOrFile('GAMMA_REDIRECT_URI', process.env),
-        JWT_SECRET: variableOrFile('JWT_SECRET', process.env),
-        JWT_EXPIRES_IN: variableOrFile('JWT_EXPIRES_IN', process.env),
-        JWT_ISSUER: variableOrFile('JWT_ISSUER', process.env),
-        DATABASE_URL: variableOrFile('DATABASE_URL', process.env),
-        BASE_URL: variableOrFile('BASE_URL', process.env),
+        NODE_ENV: variableOrFile('NODE_ENV'),
+        GAMMA_CLIENT_ID: variableOrFile('GAMMA_CLIENT_ID'),
+        GAMMA_CLIENT_SECRET: variableOrFile('GAMMA_CLIENT_SECRET'),
+        GAMMA_API_KEY_ID: variableOrFile('GAMMA_API_KEY_ID'),
+        GAMMA_API_KEY_SECRET: variableOrFile('GAMMA_API_KEY_SECRET'),
+        GAMMA_REDIRECT_URI: variableOrFile('GAMMA_REDIRECT_URI'),
+        JWT_SECRET: variableOrFile('JWT_SECRET'),
+        JWT_EXPIRES_IN: variableOrFile('JWT_EXPIRES_IN'),
+        JWT_ISSUER: variableOrFile('JWT_ISSUER'),
+        DATABASE_URL: variableOrFile('DATABASE_URL'),
+        UPLOADS_DIRECTORY: variableOrFile('UPLOADS_DIRECTORY'),
+        BASE_URL: variableOrFile('BASE_URL'),
         NEXT_PUBLIC_WEB_VERSION: process.env.NEXT_PUBLIC_WEB_VERSION,
     },
     // Skip validation with environment variable

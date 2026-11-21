@@ -1,24 +1,16 @@
-import type { JwtPayload } from 'jsonwebtoken'
 import type { NextRequest } from 'next/server'
 
-import gamma from 'gammait'
-
-import { isAdmin } from '../gamma'
-import { verifyToken } from '../token'
+import { verifyToken } from '@/lib/token'
 import {
-    ApiClientJwtPayload,
     isApiClientJwtPayload,
     isUserJwtPayload,
     SESSION_COOKIE,
-    UserJwtPayload,
-} from '../tokenDefinitions'
-import { ApiError, type ApiErrorType } from './responses'
+    type TokenContext,
+} from '@/lib/tokenDefinitions'
 
-export type TokenContext = {
-    token: (UserJwtPayload & JwtPayload) | (ApiClientJwtPayload & JwtPayload)
-}
+import { ApiError, type ApiErrorType } from '../responses'
 
-export function validateTokenMiddleware(
+export default function validateTokenMiddleware(
     req: NextRequest
 ): ApiErrorType<401> | TokenContext {
     const authorizationHeader = req.headers.get('Authorization')
@@ -68,25 +60,4 @@ export function createValidateTokenResponse(
         console.warn('Failed to verify token:', e)
         return ApiError.unauthorized
     }
-}
-
-export async function enforceAdminMiddleware(
-    _req: unknown,
-    _ctx: unknown,
-    middlewareContext: TokenContext
-): Promise<ApiErrorType<403> | TokenContext> {
-    const { token } = middlewareContext
-
-    let admin = false
-    if (isUserJwtPayload(token)) {
-        admin = await isAdmin(token.sub as gamma.UserId)
-    } else if (isApiClientJwtPayload(token)) {
-        admin = false
-    }
-
-    if (!admin) {
-        return ApiError.missingPermission
-    }
-
-    return middlewareContext
 }

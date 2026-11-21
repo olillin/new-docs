@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt, { type JwtPayload } from 'jsonwebtoken'
 import z from 'zod'
 
 /** Time before a JWT expires in seconds. */
@@ -51,3 +51,7 @@ export type SessionInfo = z.infer<typeof SessionInfo> & jwt.JwtPayload
 
 export const SESSION_COOKIE = 'session'
 export const STATE_COOKIE = 'state'
+
+export type TokenContext = {
+    token: (UserJwtPayload & JwtPayload) | (ApiClientJwtPayload & JwtPayload)
+}
